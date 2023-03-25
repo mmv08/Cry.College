@@ -1,8 +1,20 @@
 import pytest
 
 
-def xor(a, b):
-    raise NotImplementedError("TODO: Implement me plx")
+def pad_string_to_length(s: bytes, length: int) -> bytes:
+    """
+    Pad a string to a given length by repeating it.
+    """
+    if length < len(s):
+        raise ValueError("The length must be larger than the string length.")
+
+    return s * (length // len(s)) + s[:length % len(s)]
+
+def xor(a: bytes, b: bytes) -> bytes:
+    if len(a) != len(b):
+        raise ValueError("The two byte strings must have the same length.")
+
+    return bytes([x ^ y for x, y in zip(a, b)])
 
 
 class XORCipher:
@@ -11,19 +23,18 @@ class XORCipher:
         self.key = key
 
     def encrypt(self, data):
-        if not isinstance(data, bytes):
-            raise ValueError("You can only encrypt bytes.")
-        
         """
         Encrypt the data using the Vigenère cipher
         """
-        raise NotImplementedError("TODO: Implement me plx")
+        key = self.key if len(data) <= len(self.key) else pad_string_to_length(self.key, len(data))
+
+        return xor(data, key[:len(data)])
 
     def decrypt(self, data):
         """
         Decrypt the data using the Vigenère cipher
         """
-        raise NotImplementedError("TODO: Implement me plx")
+        return self.encrypt(data)
 
 
 @pytest.fixture
